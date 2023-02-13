@@ -15,7 +15,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/addr2line.exe"
+			"value" : "C:/mingw64/bin/llvm-addr2line.exe"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -31,7 +31,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/ar.exe"
+			"value" : "C:/mingw64/bin/llvm-ar.exe"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug"
+			"value" : "c:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-two/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -155,7 +155,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/g++.exe"
+			"value" : "C:/mingw64/bin/clang++.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_AR",
@@ -167,11 +167,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+					"value" : "LLVM archiver"
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/gcc-ar.exe"
+			"value" : "C:/mingw64/bin/llvm-ar.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER_RANLIB",
@@ -183,11 +183,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+					"value" : "Generate index for LLVM archive"
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "C:/mingw64/bin/llvm-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -299,7 +299,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/gcc.exe"
+			"value" : "C:/mingw64/bin/clang.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_AR",
@@ -311,11 +311,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+					"value" : "LLVM archiver"
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/gcc-ar.exe"
+			"value" : "C:/mingw64/bin/llvm-ar.exe"
 		},
 		{
 			"name" : "CMAKE_C_COMPILER_RANLIB",
@@ -327,11 +327,11 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+					"value" : "Generate index for LLVM archive"
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/gcc-ranlib.exe"
+			"value" : "C:/mingw64/bin/llvm-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -443,7 +443,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/dlltool.exe"
+			"value" : "C:/mingw64/bin/llvm-dlltool.exe"
 		},
 		{
 			"name" : "CMAKE_EXECUTABLE_FORMAT",
@@ -575,7 +575,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-two/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -647,7 +647,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one"
+			"value" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-two"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -659,7 +659,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/assignment_one"
+			"value" : "C:/Program Files (x86)/assignment_two"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -675,7 +675,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/ld.exe"
+			"value" : "C:/mingw64/bin/ld.lld.exe"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -783,7 +783,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/nm.exe"
+			"value" : "C:/mingw64/bin/llvm-nm.exe"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -811,7 +811,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/objcopy.exe"
+			"value" : "C:/mingw64/bin/llvm-objcopy.exe"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -827,7 +827,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/objdump.exe"
+			"value" : "C:/mingw64/bin/llvm-objdump.exe"
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -875,7 +875,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "assignment_one"
+			"value" : "assignment_two"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -891,7 +891,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/ranlib.exe"
+			"value" : "C:/mingw64/bin/llvm-ranlib.exe"
 		},
 		{
 			"name" : "CMAKE_RC_COMPILER",
@@ -1015,7 +1015,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/readelf.exe"
+			"value" : "C:/mingw64/bin/llvm-readelf.exe"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -1235,7 +1235,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files/JetBrains/CLion 2022.3.1/bin/mingw/bin/strip.exe"
+			"value" : "C:/mingw64/bin/llvm-strip.exe"
 		},
 		{
 			"name" : "CMAKE_VERBOSE_MAKEFILE",
@@ -1266,7 +1266,7 @@
 			"value" : "TRUE"
 		},
 		{
-			"name" : "assignment_one_BINARY_DIR",
+			"name" : "assignment_two_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1275,10 +1275,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug"
+			"value" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-two/cmake-build-debug"
 		},
 		{
-			"name" : "assignment_one_IS_TOP_LEVEL",
+			"name" : "assignment_two_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1290,7 +1290,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "assignment_one_SOURCE_DIR",
+			"name" : "assignment_two_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1299,7 +1299,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one"
+			"value" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-two"
 		}
 	],
 	"kind" : "cache",

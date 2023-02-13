@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "assignment_one",
+					"name" : "test",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "assignment_one::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-assignment_one-Debug-461f76f93bd302aa5c0d.json",
-					"name" : "assignment_one",
+					"id" : "test::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-test-Debug-92e0a54ba92fde37b338.json",
+					"name" : "test",
 					"projectIndex" : 0
 				}
 			]
@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug",
-		"source" : "C:/Users/sande/Desktop/DATAING/4 semester/nettverksprog/Network-Programming-Cpp/assignment-one"
+		"build" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/test/cmake-build-debug",
+		"source" : "C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/test"
 	},
 	"version" : 
 	{
