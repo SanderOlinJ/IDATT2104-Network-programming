@@ -26,6 +26,7 @@ public class SocketClient {
             writer.println(newLine);
             String response = reader.readLine();
             System.out.println("From server: " + response);
+            System.out.println(reader.readLine());
             newLine = readFromTerminal.nextLine();
         }
 

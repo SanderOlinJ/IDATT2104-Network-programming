@@ -15,17 +15,32 @@ public class SocketServer {
         PrintWriter writer = new PrintWriter(connection.getOutputStream(), true);
 
         writer.println("Connection has been made between client and server.");
-        writer.println("Write whatever you want, and server will repeat");
-
-        String line = reader.readLine();
-        while (line != null){
-            System.out.println("Client wrote: " + line);
-            writer.println("You wrote: " + line);
-            line = reader.readLine();
+        writer.println("Input complete math expression ((only adding and subtracting)): ");
+        try {
+            String line = reader.readLine().replaceAll("\\s", "");
+            while (line != null) {
+                System.out.println("Client wrote: " + line);
+                writer.println(line + " = " + calculateExpression(line));
+                writer.println("Input complete math expression (only adding and subtracting): ");
+                line = reader.readLine().replaceAll("\\s", "");
+            }
+        } catch (IOException exception){
+            writer.println(exception.getMessage());
         }
-
         writer.close();
         reader.close();
         connection.close();
+    }
+
+    public static int calculateExpression(String line) throws IOException{
+        String[] split = line.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
+        int result = Integer.parseInt(split[0]);
+        for (int i = 1; i < split.length; i+=2){
+            switch (split[i]) {
+                case "+" -> result += Integer.parseInt(split[i + 1]);
+                case "-" -> result -= Integer.parseInt(split[i + 1]);
+            }
+        }
+        return result;
     }
 }
