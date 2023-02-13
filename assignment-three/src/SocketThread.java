@@ -29,8 +29,8 @@ public class SocketThread extends Thread{
                     try {
                         result = calculateExpression(line);
                         writer.println(line + " = " + result);
-                    } catch (NumberFormatException exception){
-                        writer.println("Math expression error, try again.");
+                    } catch (IOException exception){
+                        writer.println(exception.getMessage());
                     }
                     writer.println("Input complete math expression (only adding and subtracting): ");
                     line = reader.readLine();
@@ -46,13 +46,17 @@ public class SocketThread extends Thread{
         }
     }
 
-    public static int calculateExpression(String line) throws IOException, NumberFormatException{
+    public static int calculateExpression(String line) throws IOException{
         String[] split = line.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
+        if (split.length % 2 == 0){
+            throw new IOException("Math expression can only contain integers and operators.");
+        }
         int result = Integer.parseInt(split[0]);
         for (int i = 1; i < split.length; i+=2){
             switch (split[i]) {
                 case "+" -> result += Integer.parseInt(split[i + 1]);
                 case "-" -> result -= Integer.parseInt(split[i + 1]);
+                default -> throw new IOException("Math expression can only contain integers and operators.");
             }
         }
         return result;
