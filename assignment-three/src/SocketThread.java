@@ -45,7 +45,6 @@ public class SocketThread extends Thread{
             exception.printStackTrace();
         }
     }
-
     public static int calculateExpression(String line) throws IOException{
         String[] split = line.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
         if (split.length % 2 == 0){
@@ -61,5 +60,4 @@ public class SocketThread extends Thread{
         }
         return result;
     }
-
 }

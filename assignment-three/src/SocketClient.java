@@ -19,9 +19,9 @@ public class SocketClient {
         String line2 = reader.readLine();
         String line3 = reader.readLine();
         System.out.println(line1 + "\n" + line2 + "\n" + line3);
-        String newLine = readFromTerminal.nextLine();
 
-        while (!newLine.equals("")){
+        String newLine = readFromTerminal.nextLine();
+        while (newLine != null && !newLine.isEmpty()){
             writer.println(newLine);
             String response = reader.readLine();
             System.out.println("From server: " + response);
