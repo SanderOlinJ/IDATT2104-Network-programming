@@ -34,6 +34,7 @@ public class UDPClient {
                 String result = new String(bytes, 0, bytes.length);
                 result = result.trim();
                 System.out.println(result);
+                System.out.println("--------------");
             }
             System.out.println("EXITING");
         } catch (IOException exception){

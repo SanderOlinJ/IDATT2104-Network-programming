@@ -27,7 +27,7 @@ public class UDPThread {
                 if (input.trim().equals("EXIT")){
                     break;
                 }
-                String result = Double.toString(calculateExpression(input));
+                String result = calculateExpression(input);
                 System.out.println("Calculation of: " + input.trim() + ", gives: " + result);
                 byte[] bytesSend = result.getBytes(StandardCharsets.UTF_8);
                 packetSend = new DatagramPacket(bytesSend, bytesSend.length, address, packetReceived.getPort());
@@ -42,7 +42,7 @@ public class UDPThread {
         }
     }
 
-    public static double calculateExpression(String line) throws IOException{
+    public static String calculateExpression(String line) throws IOException{
         line = line.trim();
         String[] split = line.split("(?<=\\d)(?=\\D)|(?<=\\D)(?=\\d)");
         if (split.length % 2 == 0){
@@ -55,9 +55,11 @@ public class UDPThread {
                 case "-" -> result -= Double.parseDouble(split[i + 1]);
                 case "*" -> result *= Double.parseDouble(split[i + 1]);
                 case "/" -> result /= Double.parseDouble(split[i + 1]);
-                default -> throw new IOException("Math expression can only contain integers and operators.");
+                default -> {
+                    return  "Math expression can only contain integers and operators.";
+                }
             }
         }
-        return result;
+        return Double.toString(result);
     }
 }
