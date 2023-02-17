@@ -15,15 +15,15 @@ public class UDPClient {
             Scanner in = new Scanner(System.in);
             byte[] bytes;
             while (true){
-                System.out.print("Enter the equation in the format:\n");
-                System.out.println("OPERAND operator OPERAND\n'");
+                System.out.print("Enter a math equation:\n");
+                System.out.println("(Type 'EXIT' to exit)");
                 String input = in.nextLine();
                 bytes = new byte[65535];
                 bytes = input.getBytes(StandardCharsets.UTF_8);
                 DatagramPacket sendPacket = new DatagramPacket(bytes, bytes.length, address, PORT_NR);
                 clientSocket.send(sendPacket);
 
-                if (input.equals("EXIT")){
+                if (input.trim().equals("EXIT")){
                     break;
                 }
 
