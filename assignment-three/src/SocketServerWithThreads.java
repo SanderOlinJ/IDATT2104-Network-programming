@@ -1,9 +1,9 @@
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
 
-public class SocketServerUsingThreads {
+public class SocketServerWithThreads {
+
     public static void main(String[] args) {
-
         final int PORT_NR = 1337;
         int nrOfConnections = 0;
         try (ServerSocket serverSocket = new ServerSocket(PORT_NR)){
