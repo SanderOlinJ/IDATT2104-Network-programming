@@ -1,3 +1,0 @@
-C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug/CMakeFiles/assignment_one.dir
-C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/sande/Desktop/DATAING/4-semester/nettverksprog/Network-Programming-Cpp/assignment-one/cmake-build-debug/CMakeFiles/rebuild_cache.dir
