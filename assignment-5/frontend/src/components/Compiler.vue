@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts">
+  import { postCode } from "../utils/httputils"
 
   export default{
     name: "Compiler",
@@ -52,6 +53,7 @@
     },
     methods: {
       runCompiler(){
+        postCode(this.code, this.selected);
       }
     }
   }
