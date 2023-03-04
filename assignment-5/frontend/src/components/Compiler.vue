@@ -4,9 +4,9 @@
     <div>Selected: {{ selected }}</div>
 
     <select id="select" v-model="selected">
-      <option>C++</option>
-      <option>Java</option>
       <option>Python</option>
+      <option disabled>C++</option>
+      <option disabled>Java</option>
     </select>
 
     <textarea 
@@ -53,7 +53,19 @@
     },
     methods: {
       runCompiler(){
-        postCode(this.code, this.selected);
+        this.output = ""
+        postCode(this.code, this.selected).then(
+          (response) => {
+            let result = response.data
+            if (result.error == ""){
+              this.output = result.compiled
+            } else {
+              this.output = result.error
+            }
+          }
+        ).catch((error) => {
+          alert(error.response)
+        })
       }
     }
   }

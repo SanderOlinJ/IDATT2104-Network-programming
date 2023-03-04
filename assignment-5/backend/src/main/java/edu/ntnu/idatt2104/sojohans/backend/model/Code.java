@@ -4,6 +4,7 @@ public class Code {
     private final String code;
     private String compiled;
     private final String language;
+    private String error;
 
     public Code(String string, String language){
         this.code = string;
@@ -24,5 +25,13 @@ public class Code {
 
     public String getLanguage() {
         return language;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getError() {
+        return error;
     }
 }
