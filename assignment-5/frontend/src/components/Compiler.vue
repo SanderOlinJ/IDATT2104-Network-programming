@@ -6,6 +6,7 @@
     <select id="select" v-model="selected">
       <option>C++</option>
       <option>Java</option>
+      <option>Python</option>
     </select>
 
     <textarea 
@@ -26,6 +27,7 @@
   <div class="spacing"></div>
 
   <div class="grid-item">
+    <p id="text">Output</p>
     <textarea 
       class="coding" 
       id="code-output" 
@@ -45,7 +47,7 @@
       return {
           selected: "",
           code: "",
-          output: "Code"
+          output: ""
       }
     },
     methods: {
@@ -83,9 +85,12 @@
 }
 
 #code-output{
-  margin-top: 46px;
+  margin-top: -4px;
 }
-
+#text{
+  margin: 0;
+  height: 0;
+}
 #compile-button{
   border-radius: 5px;
   display: block;
