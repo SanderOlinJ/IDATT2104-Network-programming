@@ -22,22 +22,5 @@
         </div>
     </section>
     <script src="canvasDrawing.js"></script>
-    <script>
-        const ws = new WebSocket("ws://localhost:3027")
-        ws.onopen = (event) => {
-            console.log("WebSocket is connected")
-            const id = Math.round(Math.random() * 100)
-            console.log("Sending...", id)
-            const data = JSON.stringify({
-                id,
-                name: `${id} Sander Olin`,
-                study: "Computer science"
-            })
-            ws.send(data)
-        }
-        ws.onmessage = (event) => console.log(event)
-        ws.onerror = (event) => console.log("WebSocket Error", event)
-        ws.onclose = (event) => console.log("Disconnected from WebSocket server")
-    </script>
 </body>
 </html>
