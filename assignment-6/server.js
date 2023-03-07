@@ -1,38 +1,13 @@
-const net = require('net')
-
-const httpServer = net.createServer(
-    (connection) => {
-        connection.on('data', () => {
-            let content = 
-            `<!DOCTYPE html>
-            <html>
-                <head>
-                    <meta charset="UTF-8" />
-                </head>
-                <body>
-                    WebSocket Test
-                    <script>
-                        let ws = new WebSocket('ws://localhost:3001')
-                        ws.onmessage = event => alert('Message from server: ' + event.data)
-                        ws.onopen = () => ws.send('hello')
-                    </script>
-                </body>
-            </html>
-            `
-            connection.write('HTTP/1.1 200 OK\r\nContent-Length: ' + content.length + '\r\n\r\n' + content)
-        })
-    }
-)
-
-httpServer.listen(3000, () => {
-    console.log('HTTP server listening on port 3000')
-})
+const net = require("net")
+const crypto = require("crypto")
 
 const wsServer = net.createServer(
     (connection) => {
         console.log('\nClient connected')
         connection.on('data', (data) => {
-            console.log('Data received from client: ', data.toString())
+            if (data.toString().includes("Sec-WebSocket-Key:")){
+                onSocketUpgrade(data);
+            }
         })
         connection.on('end', () => {
             console.log('Client disconnected')
@@ -43,6 +18,29 @@ wsServer.on('error', (error) => {
     console.log('Error: ', error)
 })
 
-wsServer.listen(3001, () => {
-    console.log('WebSocket server listening on port 3001')
+wsServer.listen(3027, () => {
+    console.log('WebSocket server listening on port 3027')
 })
+
+function onSocketUpgrade(data){
+    const dataString = data.toString()
+    const keyIndex = dataString.indexOf("Sec-WebSocket-Key: ");
+    const endOfLineIndex = dataString.indexOf("\r\n", keyIndex);
+    const key = dataString.substring(keyIndex + "Sec-WebSocket-Key: ".length, endOfLineIndex);
+    
+    console.log(`${key} connected`)
+    const headers = createHandShakeHeaders(key)
+    console.log({
+        headers
+    })
+}
+
+function createHandShakeHeaders(data){
+    const acceptKey = createSocketAccept(data)
+    return acceptKey
+}
+
+function createSocketAccept(key){
+    let GUID = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11"
+    return crypto.createHash("sha1").update(key + GUID).digest("base64")
+}
