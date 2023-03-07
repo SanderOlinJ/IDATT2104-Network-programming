@@ -1,7 +1,10 @@
 const net = require("net")
 const crypto = require("crypto")
-
+const SEVEN_BIT_INTEGER_MARKER = 125
+const MAXIMUM_SIXTEEN_BITS_INTEGER = 2 ** 16
 let connections = []
+
+
 const wsServer = net.createServer(
     (connection) => {
         console.log('\nClient connected')
@@ -10,7 +13,14 @@ const wsServer = net.createServer(
                 connection.write(onSocketUpgrade(data));
                 connections.push(connection)
             } else {
-                onSocketRead(data)
+                const message = onSocketRead(data)
+                console.log(message.toString("utf-8"))
+                try{
+                    JSON.parse(message);
+                    const messageToClient = prepareMessage(message)
+                    connection.write(messageToClient)
+                } catch (error){
+                }
             }
         })
         connection.on('end', () => {
@@ -60,10 +70,7 @@ function onSocketRead(data){
     //Extracts the payload length value from the second byte of the WebSocket frame header.
     //The first bit is a marker, which is always 1 in web socket protocol.
     const payloadLength = payloadLengthByte & 0x7f
-    let messageLength = 0
-
-    if (payloadLength <= 125){
-        messageLength = payloadLength
+    if (payloadLength <= SEVEN_BIT_INTEGER_MARKER){
         maskOffset = 2
     } else {
         throw new Error("Message too long!")
@@ -74,10 +81,9 @@ function onSocketRead(data){
     const maskStartValue = 2
     const maskLength = 4
     const maskKey = getMaskKey(bytes, maskStartValue, maskLength)
-    const encodedMessage = getEncodedMessage(bytes, maskStartValue, maskLength, messageLength)
+    const encodedMessage = getEncodedMessage(bytes, maskStartValue, maskLength)
     const decodedMessage = unmaskData(encodedMessage, maskKey)
-    console.log(decodedMessage.toString("utf-8"))
-    console.log()
+    return decodedMessage
 }
 function getMaskKey(bytes, maskStartValue, maskLength){
     let mask = []
@@ -87,7 +93,7 @@ function getMaskKey(bytes, maskStartValue, maskLength){
     return mask
 }
 
-function getEncodedMessage(bytes, maskStartValue, maskLength, messageLength){
+function getEncodedMessage(bytes, maskStartValue, maskLength){
     let encodedMessage = []
     let messageStartIndex = maskStartValue + maskLength
     let i = messageStartIndex
@@ -105,4 +111,28 @@ function unmaskData(encodedData, maskKey){
         buffer[i] = (encodedData[i] ^ maskKey[i % 4])
     }
     return buffer
+}
+
+function prepareMessage(message){
+    const msg = Buffer.from(message)
+    const msgSize = msg.length
+
+    let dataFrameBuffer
+
+    const firstByte = 0x80 | 0x01
+    if (msgSize <= SEVEN_BIT_INTEGER_MARKER){
+        const bytes = [firstByte]
+        dataFrameBuffer = Buffer.from(bytes.concat(msgSize))
+    } else {
+        throw new Error("Message too long.")
+    }
+    const totalLength = dataFrameBuffer.byteLength + msgSize
+
+    const dataFrameResponse = Buffer.allocUnsafe(totalLength)
+    let offset = 0
+    for (const buffer of [dataFrameBuffer, msg]){
+        dataFrameResponse.set(buffer, offset)
+        offset += buffer.length
+    }
+    return dataFrameResponse
 }

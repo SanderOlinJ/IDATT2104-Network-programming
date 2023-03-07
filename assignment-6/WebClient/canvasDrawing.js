@@ -1,18 +1,13 @@
 const ws = new WebSocket("ws://localhost:3027")
 ws.onopen = (event) => {
     console.log("WebSocket is connected")
-    const id = Math.round(Math.random() * 100)
-    console.log("Sending...", id)
-    const data = JSON.stringify({
-        id,
-        name: `${id} Sander Olin`,
-        study: "Computer science"
-    })
-    ws.send(data)
 }
-ws.onmessage = (event) => console.log(event)
+ws.onmessage = (event) => {
+    var message = JSON.parse(event.data)
+    receiveMessage(message)
+}
 ws.onerror = (event) => console.log("WebSocket Error", event)
-ws.onclose = (event) => console.log("Disconnected from WebSocket server")
+ws.onclose = console.log("Disconnected from WebSocket server")
 
 const canvas = document.getElementById("drawing-board")
 const toolbar = document.getElementById("toolbar")
@@ -26,6 +21,9 @@ canvas.height = window.innerHeight - canvasOffsetY
 
 let isDrawing = false
 let lineWidth = 10
+let lastX = null
+let lastY = null
+
 
 toolbar.addEventListener('click', event => {
     if (event.target.id === 'clear') {
@@ -44,40 +42,43 @@ toolbar.addEventListener('change', event => {
     
 })
 
-const drawAndSend = (event) => {
-    if(!isDrawing) {
-        return
+const sendMessage = (event) => {
+    if(isDrawing) {
+        ws.send(JSON.stringify({
+            x: event.clientX,
+            y: event.clientY
+        }))
     }
-    ctx.lineWidth = lineWidth
-    ctx.lineCap = 'round'
-    ctx.lineTo(event.clientX - (canvasOffsetX-20), event.clientY - canvasOffsetY)
-    ctx.stroke();
-    ws.send(JSON.stringify({
-        x: event.clientX,
-        y: event.clientY
-    }))
 }
 
-canvas.addEventListener('mousedown', (event) => {
+function receiveMessage(message) {
+    if (lastX !== null && lastY !== null){
+        drawLine(lastX, lastY, message.x, message.y)
+    }
+    if (isDrawing){
+        lastX = message.x
+        lastY = message.y
+    }
+}
+
+function drawLine(startX, startY, nextX, nextY){
+    ctx.lineWidth = lineWidth
+    ctx.lineCap = 'round'
+    ctx.beginPath()
+    ctx.moveTo(startX - (canvasOffsetX-20), startY - canvasOffsetY)
+    ctx.lineTo(nextX - (canvasOffsetX-20), nextY - canvasOffsetY)
+    ctx.stroke()
+}
+
+canvas.addEventListener('mousedown', () => {
     isDrawing = true
 })
 
-canvas.addEventListener('mouseup', event => {
+canvas.addEventListener('mouseup', () => {
     isDrawing = false
-    ctx.stroke()
-    ctx.beginPath()
+    lastX = null
+    lastY = null
 })
 
-canvas.addEventListener('mousemove', drawAndSend)
+canvas.addEventListener('mousemove', sendMessage)
 
-function getMousePos(evt) {
-    return {
-        x: Math.round(evt.clientX - canvasOffsetX),
-        y: Math.round(evt.clientY - canvasOffsetY)
-    };
-}
-
-function sendMessage(evt){
-  if(isDrawing)
-    ws.send(getMousePos(evt).x + "," + getMousePos(evt).y)
-}
