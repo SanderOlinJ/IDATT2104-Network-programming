@@ -6,7 +6,7 @@ const wsServer = net.createServer(
         console.log('\nClient connected')
         connection.on('data', (data) => {
             if (data.toString().includes("Sec-WebSocket-Key:")){
-                onSocketUpgrade(data);
+                connection.write(onSocketUpgrade(data));
             }
         })
         connection.on('end', () => {
@@ -30,14 +30,19 @@ function onSocketUpgrade(data){
     
     console.log(`${key} connected`)
     const headers = createHandShakeHeaders(key)
-    console.log({
-        headers
-    })
+    return headers
 }
 
 function createHandShakeHeaders(data){
     const acceptKey = createSocketAccept(data)
-    return acceptKey
+    const acceptHeader= [
+        "HTTP/1.1 101 Switching Protocols",
+        "Upgrade: websocket",
+        "Connection: Upgrade",
+        `Sec-WebSocket-Accept: ${acceptKey}`,
+        ""
+    ].map(line => line.concat("\r\n")).join("")
+    return acceptHeader
 }
 
 function createSocketAccept(key){
