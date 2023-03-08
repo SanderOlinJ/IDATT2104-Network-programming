@@ -16,14 +16,6 @@ canvas.height = window.innerHeight - canvasOffsetY
 
 const ws = new WebSocket("ws://localhost:3027")
 ws.onopen = () => {
-    /*
-    const dataString = event.data
-    const idIndex = dataString.indexOf("ClientID: ");
-    const endOfLineIndex = dataString.indexOf("\r\n", idIndex);
-    const id = dataString.substring(idIndex + "ClientID: ".length, endOfLineIndex);
-    console.log(`Received clientID: ${id}`);
-    console.log(id)
-    */
     console.log("WebSocket is connected")
 }
 
@@ -36,16 +28,13 @@ ws.onmessage = (event) => {
     receiveMessage(message)
 }
 ws.onerror = (event) => console.log("WebSocket Error", event)
+
 ws.onclose = console.log("Disconnected from WebSocket server")
 
 toolbar.addEventListener('click', event => {
     if (event.target.id === 'clear') {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ws.send(JSON.stringify({
-            x: event.clientX,
-            y: event.clientY,
-            color: colorPicker.value,
-            lineWidth: lineWidthPicker.value,
             clear: true
         }))
     }
@@ -58,7 +47,6 @@ const drawAndSend = (event) => {
         if(packetEnd){
             newX = lastX
             newY = lastY
-            console.log("yo")
         } else {
             newX = event.clientX
             newY = event.clientY
@@ -78,11 +66,7 @@ const drawAndSend = (event) => {
     }
 }
 
-//TODO: Draw based on previous messages
-// Continue drawing, from the last message of a Client
-
 function receiveMessage(message) {
-
     if (message.clear){
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         return

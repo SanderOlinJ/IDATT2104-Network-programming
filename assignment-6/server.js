@@ -23,7 +23,6 @@ const wsServer = net.createServer(
                 connections.push(connection)
             } else {
                 const message = onSocketRead(data)
-                console.log(message.toString("utf-8"))
                 try{
                     JSON.parse(message);
                     const messageToClient = prepareMessage(message)
@@ -92,7 +91,6 @@ function onSocketRead(data){
     } else {
         throw new Error("Message too long!")
     }
-
     //The masking key consists of 4 bytes, and is located immediately after the payload length byte in the WebSocket frame header.
     //2 is the index of the first byte of the mask
     const maskLength = 4
@@ -134,18 +132,19 @@ function prepareMessage(message){
     const msgSize = msg.length
 
     let dataFrameBuffer
-
     const firstByte = 0x80 | 0x01
+
     if (msgSize <= SEVEN_BIT_INTEGER_MARKER){
         const bytes = [firstByte]
         dataFrameBuffer = Buffer.from(bytes.concat(msgSize))
     } else {
         throw new Error("Message too long.")
     }
-    const totalLength = dataFrameBuffer.byteLength + msgSize
 
+    const totalLength = dataFrameBuffer.byteLength + msgSize
     const dataFrameResponse = Buffer.allocUnsafe(totalLength)
     let offset = 0
+    
     for (const buffer of [dataFrameBuffer, msg]){
         dataFrameResponse.set(buffer, offset)
         offset += buffer.length
