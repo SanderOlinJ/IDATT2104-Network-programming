@@ -14,7 +14,6 @@ const wsServer = net.createServer(
                 connections.push(connection)
             } else {
                 const message = onSocketRead(data)
-                console.log(message.toString("utf-8"))
                 try{
                     JSON.parse(message);
                     const messageToClient = prepareMessage(message)

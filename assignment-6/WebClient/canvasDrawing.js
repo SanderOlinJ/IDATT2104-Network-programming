@@ -12,6 +12,8 @@ ws.onclose = console.log("Disconnected from WebSocket server")
 
 const canvas = document.getElementById("drawing-board")
 const toolbar = document.getElementById("toolbar")
+let colorPicker = document.getElementById("stroke")
+let lineWidthPicker = document.getElementById("lineWidth")
 const ctx = canvas.getContext("2d")
 
 const canvasOffsetX = canvas.offsetLeft
@@ -21,43 +23,46 @@ canvas.width = window.innerWidth - canvasOffsetX
 canvas.height = window.innerHeight - canvasOffsetY
 
 let isDrawing = false
-let lineWidth = 10
-
 
 toolbar.addEventListener('click', event => {
     if (event.target.id === 'clear') {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ws.send(JSON.stringify({
+            x: event.clientX,
+            y: event.clientY,
+            color: colorPicker.value,
+            lineWidth: lineWidthPicker.value,
+            clear: true
+        }))
     }
-})
-
-toolbar.addEventListener('change', event => {
-    if(event.target.id === 'stroke') {
-        ctx.strokeStyle = event.target.value
-    }
-
-    if(event.target.id === 'lineWidth') {
-        lineWidth = event.target.value
-    }
-    
 })
 
 const drawAndSend = (event) => {
     if(isDrawing) {
+        ctx.strokeStyle = colorPicker.value
+        ctx.lineWidth = lineWidthPicker.value
         drawLine(event.clientX, event.clientY)
         ws.send(JSON.stringify({
             x: event.clientX,
-            y: event.clientY
+            y: event.clientY,
+            color: colorPicker.value,
+            lineWidth: lineWidthPicker.value,
+            clear: false
         }))
     }
 }
 
 function receiveMessage(message) {
+    if (message.clear){
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+    ctx.strokeStyle = message.color
+    ctx.lineWidth = message.lineWidth
     drawLine(message.x, message.y)
     ctx.beginPath()
 }
 
 function drawLine(x, y){
-    ctx.lineWidth = lineWidth
     ctx.lineCap = 'round'
     ctx.lineTo(x - canvasOffsetX, y)
     ctx.stroke()
