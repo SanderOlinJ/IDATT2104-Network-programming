@@ -53,14 +53,24 @@ toolbar.addEventListener('click', event => {
 
 const drawAndSend = (event) => {
     if(isDrawing) {
+        let newX
+        let newY
+        if(packetEnd){
+            newX = lastX
+            newY = lastY
+            console.log("yo")
+        } else {
+            newX = event.clientX
+            newY = event.clientY
+        }
         ctx.strokeStyle = colorPicker.value
         ctx.lineWidth = lineWidthPicker.value
-        drawLine(event.clientX, event.clientY)
+        drawLine(lastX, lastY, newX, newY)
         ws.send(JSON.stringify({
             clientID: clientID,
             packetEnd: packetEnd,
-            x: event.clientX,
-            y: event.clientY,
+            x: newX,
+            y: newY,
             color: colorPicker.value,
             lineWidth: lineWidthPicker.value,
             clear: false
@@ -72,31 +82,38 @@ const drawAndSend = (event) => {
 // Continue drawing, from the last message of a Client
 
 function receiveMessage(message) {
-    let startX
-    let startY
-    let object = {
-        clientID: message.clientID,
-        x: message.x,
-        y: message.y
-    }
-    let client 
-    if (client = clients.find(client => client.clientID == message.clientID)){
-        console.log("yo")
-        let index = clients.indexOf(message)
-        startX = client.x
-        startY = client.y
-        ctx.strokeStyle = message.color
-        ctx.lineWidth = message.lineWidth
-        drawLine(startX, startY, message.x, message.y)
-        clients[index] = object
-        ctx.beginPath()
-    } else {
-        clients.push(object)
-    }
+
     if (message.clear){
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         return
     }
+    let object = {
+        clientID: message.clientID,
+        x: message.x,
+        y: message.y,
+        packetEnd: message.packetEnd
+    }
+
+    let startX
+    let startY
+    let client 
+
+    if (!(client = clients.find(client => client.clientID == message.clientID))){
+        clients.push(object)
+        return
+    }
+    let index = clients.indexOf(client)
+    if (client.packetEnd){
+        clients[index] = object
+        return
+    }
+    startX = client.x
+    startY = client.y
+    ctx.strokeStyle = message.color
+    ctx.lineWidth = message.lineWidth
+    drawLine(startX, startY, message.x, message.y)
+    clients[index] = object
+    ctx.beginPath()
 }
 
 function drawLine(startX, startY, x, y){
@@ -112,15 +129,16 @@ canvas.addEventListener('mousedown', (event) => {
     isDrawing = true
     lastX = event.clientX
     lastY = event.clientY
-    ctx.beginPath()
     packetEnd = false
 })
 
 canvas.addEventListener('mouseup', () => {
+    packetEnd = true
+    drawAndSend()
     isDrawing = false
     lastX = null
     lastY = null
-    packetEnd = true
+    ctx.beginPath()
 })
 
 canvas.addEventListener('mousemove', drawAndSend)
