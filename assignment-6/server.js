@@ -1,23 +1,34 @@
 const net = require("net")
 const crypto = require("crypto")
 const SEVEN_BIT_INTEGER_MARKER = 125
-
 const connections = []
+let clientID = 0
 
 const wsServer = net.createServer(
     (connection) => {
         console.log('\nClient connected')
+        connections.push({
+            connection: connection,
+            clientID: clientID
+        })
+        clientID++
         connection.on('data', (data) => {
             if (data.toString().includes("Sec-WebSocket-Key:")){
-                connection.write(onSocketConnecting(data));
+                const id = connections.find(obj => obj.connection == connection).clientID
+                const header = onSocketConnecting(data)
+                connection.write(header)
+                
+                const clientID = prepareMessage(id.toString())
+                connection.write(clientID)
                 connections.push(connection)
             } else {
                 const message = onSocketRead(data)
+                console.log(message.toString("utf-8"))
                 try{
                     JSON.parse(message);
                     const messageToClient = prepareMessage(message)
                     for (let i = 0; i < connections.length; i++){
-                        const con = connections[i]
+                        const con = connections[i].connection
                         if (con !== connection){
                             con.write(messageToClient)
                         }
@@ -43,9 +54,9 @@ wsServer.listen(3027, () => {
 
 function onSocketConnecting(data){
     const dataString = data.toString()
-    const keyIndex = dataString.indexOf("Sec-WebSocket-Key: ");
-    const endOfLineIndex = dataString.indexOf("\r\n", keyIndex);
-    const key = dataString.substring(keyIndex + "Sec-WebSocket-Key: ".length, endOfLineIndex);
+    const keyIndex = dataString.indexOf("Sec-WebSocket-Key: ")
+    const endOfLineIndex = dataString.indexOf("\r\n", keyIndex)
+    const key = dataString.substring(keyIndex + "Sec-WebSocket-Key: ".length, endOfLineIndex)
     
     console.log(`${key} connected`)
     const headers = createHandShakeHeaders(key)
@@ -59,7 +70,7 @@ function createHandShakeHeaders(data){
         "Upgrade: websocket",
         "Connection: Upgrade",
         `Sec-WebSocket-Accept: ${acceptKey}`,
-        ""
+        ''
     ].map(line => line.concat("\r\n")).join("")
     return acceptHeader
 }
