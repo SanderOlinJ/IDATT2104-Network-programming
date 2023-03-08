@@ -3,6 +3,7 @@ ws.onopen = (event) => {
     console.log("WebSocket is connected")
 }
 ws.onmessage = (event) => {
+    console.log(event.data)
     var message = JSON.parse(event.data)
     receiveMessage(message)
 }
@@ -21,8 +22,6 @@ canvas.height = window.innerHeight - canvasOffsetY
 
 let isDrawing = false
 let lineWidth = 10
-let lastX = null
-let lastY = null
 
 
 toolbar.addEventListener('click', event => {
@@ -42,8 +41,9 @@ toolbar.addEventListener('change', event => {
     
 })
 
-const sendMessage = (event) => {
+const drawAndSend = (event) => {
     if(isDrawing) {
+        drawLine(event.clientX, event.clientY)
         ws.send(JSON.stringify({
             x: event.clientX,
             y: event.clientY
@@ -52,21 +52,14 @@ const sendMessage = (event) => {
 }
 
 function receiveMessage(message) {
-    if (lastX !== null && lastY !== null){
-        drawLine(lastX, lastY, message.x, message.y)
-    }
-    if (isDrawing){
-        lastX = message.x
-        lastY = message.y
-    }
+    drawLine(message.x, message.y)
+    ctx.beginPath()
 }
 
-function drawLine(startX, startY, nextX, nextY){
+function drawLine(x, y){
     ctx.lineWidth = lineWidth
     ctx.lineCap = 'round'
-    ctx.beginPath()
-    ctx.moveTo(startX - (canvasOffsetX-20), startY - canvasOffsetY)
-    ctx.lineTo(nextX - (canvasOffsetX-20), nextY - canvasOffsetY)
+    ctx.lineTo(x - canvasOffsetX, y)
     ctx.stroke()
 }
 
@@ -76,9 +69,9 @@ canvas.addEventListener('mousedown', () => {
 
 canvas.addEventListener('mouseup', () => {
     isDrawing = false
-    lastX = null
-    lastY = null
+    ctx.beginPath()
 })
 
-canvas.addEventListener('mousemove', sendMessage)
+
+canvas.addEventListener('mousemove', drawAndSend)
 

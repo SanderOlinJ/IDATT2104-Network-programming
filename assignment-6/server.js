@@ -2,8 +2,8 @@ const net = require("net")
 const crypto = require("crypto")
 const SEVEN_BIT_INTEGER_MARKER = 125
 const MAXIMUM_SIXTEEN_BITS_INTEGER = 2 ** 16
-let connections = []
 
+const connections = []
 
 const wsServer = net.createServer(
     (connection) => {
@@ -18,7 +18,12 @@ const wsServer = net.createServer(
                 try{
                     JSON.parse(message);
                     const messageToClient = prepareMessage(message)
-                    connection.write(messageToClient)
+                    for (let i = 0; i < connections.length; i++){
+                        const con = connections[i]
+                        if (con !== connection){
+                            con.write(messageToClient)
+                        }
+                    }
                 } catch (error){
                 }
             }
