@@ -1,7 +1,6 @@
 const net = require("net")
 const crypto = require("crypto")
 const SEVEN_BIT_INTEGER_MARKER = 125
-const MAXIMUM_SIXTEEN_BITS_INTEGER = 2 ** 16
 
 const connections = []
 
@@ -10,7 +9,7 @@ const wsServer = net.createServer(
         console.log('\nClient connected')
         connection.on('data', (data) => {
             if (data.toString().includes("Sec-WebSocket-Key:")){
-                connection.write(onSocketUpgrade(data));
+                connection.write(onSocketConnecting(data));
                 connections.push(connection)
             } else {
                 const message = onSocketRead(data)
@@ -24,6 +23,8 @@ const wsServer = net.createServer(
                         }
                     }
                 } catch (error){
+                    //When JSON can't parse the message, it means the client has disconnected.
+                    connections.splice(connections.indexOf(connection), 1)
                 }
             }
         })
@@ -40,7 +41,7 @@ wsServer.listen(3027, () => {
     console.log('WebSocket server listening on port 3027')
 })
 
-function onSocketUpgrade(data){
+function onSocketConnecting(data){
     const dataString = data.toString()
     const keyIndex = dataString.indexOf("Sec-WebSocket-Key: ");
     const endOfLineIndex = dataString.indexOf("\r\n", keyIndex);
@@ -74,6 +75,7 @@ function onSocketRead(data){
     //Extracts the payload length value from the second byte of the WebSocket frame header.
     //The first bit is a marker, which is always 1 in web socket protocol.
     const payloadLength = payloadLengthByte & 0x7f
+    let maskOffset
     if (payloadLength <= SEVEN_BIT_INTEGER_MARKER){
         maskOffset = 2
     } else {
@@ -82,10 +84,9 @@ function onSocketRead(data){
 
     //The masking key consists of 4 bytes, and is located immediately after the payload length byte in the WebSocket frame header.
     //2 is the index of the first byte of the mask
-    const maskStartValue = 2
     const maskLength = 4
-    const maskKey = getMaskKey(bytes, maskStartValue, maskLength)
-    const encodedMessage = getEncodedMessage(bytes, maskStartValue, maskLength)
+    const maskKey = getMaskKey(bytes, maskOffset, maskLength)
+    const encodedMessage = getEncodedMessage(bytes, maskOffset, maskLength)
     const decodedMessage = unmaskData(encodedMessage, maskKey)
     return decodedMessage
 }
