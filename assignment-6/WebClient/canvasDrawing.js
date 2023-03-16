@@ -44,7 +44,7 @@ const drawAndSend = (event) => {
     if(isDrawing) {
         let newX
         let newY
-        if(packetEnd){
+        if(packetEnd) {
             newX = lastX
             newY = lastY
         } else {
@@ -77,19 +77,25 @@ function receiveMessage(message) {
         y: message.y,
         packetEnd: message.packetEnd
     }
-
+    
     let startX
     let startY
     let client 
+    let index
 
-    if (!(client = clients.find(client => client.clientID == message.clientID))){
+    if (!(clients.find(client => client.clientID == message.clientID))){
         clients.push(object)
+        ctx.strokeStyle = message.color
+        ctx.lineWidth = message.lineWidth
+        drawLine(message.x, message.y, message.x, message.y)
+        ctx.beginPath()
         return
     }
-    let index = clients.indexOf(client)
+    client = clients.find(client => client.clientID == message.clientID)
+    index = clients.indexOf(client)
     if (client.packetEnd){
         clients[index] = object
-        return
+        client = object
     }
     startX = client.x
     startY = client.y
